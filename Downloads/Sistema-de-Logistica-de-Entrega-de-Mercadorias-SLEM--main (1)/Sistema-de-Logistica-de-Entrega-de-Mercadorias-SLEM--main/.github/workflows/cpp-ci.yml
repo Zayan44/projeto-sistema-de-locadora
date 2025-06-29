@@ -1,0 +1,77 @@
+name: C++ CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositório
+        uses: actions/checkout@v4
+
+      - name: Instalar compilador g++
+        run: sudo apt-get update && sudo apt-get install g++ -y
+
+      - name: Compilar todos os arquivos
+        run: g++ -o app main.cpp veiculo.cpp pedido.cpp local.cpp
+
+      - name: Executar programa com entrada simulada
+        run: |
+          ./app <<EOF
+          1
+          1
+          Brasil, MG, Belo Horizonte, Rua A 100
+          1378
+          74487
+          2
+          3
+          Brasil, MG, Belo Horizonte, Rua A 100
+          1
+          rua dos palmares
+          1
+          rua morangos
+          6848684
+          6846846
+          2
+          0
+          2
+          1
+          134D4DF
+          ford focus
+          1
+          rua dos palmares
+          s
+          789I8IO
+          honda civic
+          0
+          rua morangos
+          n
+          2
+          3
+          134D4SA
+          fiat uno
+          2
+          0
+          rua morangos
+          456M1YU
+          0
+          n
+          2
+          4
+          456M1YU
+          2
+          0
+          7
+          EOF
+
+      - name: Upload do executável
+        uses: actions/upload-artifact@v4
+        with:
+          name: programa-compilado
+          path: ./app
